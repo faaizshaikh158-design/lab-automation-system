@@ -1,0 +1,61 @@
+CREATE TABLE users (
+ id INT AUTO_INCREMENT PRIMARY KEY,
+ name VARCHAR(100) NOT NULL,
+ username VARCHAR(50) UNIQUE NOT NULL,
+ password VARCHAR(255) NOT NULL,
+ role VARCHAR(20) NOT NULL,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE products (
+ id INT AUTO_INCREMENT PRIMARY KEY,
+ product_id VARCHAR(10) UNIQUE NOT NULL,
+ product_name VARCHAR(100) NOT NULL,
+ product_type VARCHAR(100) NOT NULL,
+ revision_no VARCHAR(10),
+ manufacturing_no VARCHAR(20),
+ manufacture_date DATE,
+ status VARCHAR(50) DEFAULT 'Pending Testing',
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE tests (
+ id INT AUTO_INCREMENT PRIMARY KEY,
+ test_id VARCHAR(12) UNIQUE NOT NULL,
+ product_ref INT NOT NULL,
+ test_type VARCHAR(100) NOT NULL,
+ department VARCHAR(100),
+ criteria TEXT,
+ expected_output TEXT,
+ actual_output TEXT,
+ result VARCHAR(20),
+ remarks TEXT,
+ tested_by INT,
+ test_date DATE,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+ FOREIGN KEY (product_ref) REFERENCES products(id),
+ FOREIGN KEY (tested_by) REFERENCES users(id)
+);
+
+CREATE TABLE remanufacture (
+ id INT AUTO_INCREMENT PRIMARY KEY,
+ product_ref INT NOT NULL,
+ reason TEXT,
+ action_taken TEXT,
+ date_sent DATE,
+ date_received DATE,
+ status VARCHAR(50),
+
+ FOREIGN KEY (product_ref) REFERENCES products(id)
+);
+
+CREATE TABLE cpri_records (
+ id INT AUTO_INCREMENT PRIMARY KEY,
+ product_ref INT NOT NULL,
+ sent_date DATE,
+ approval_status VARCHAR(50),
+ remarks TEXT,
+
+ FOREIGN KEY (product_ref) REFERENCES products(id)
+);
